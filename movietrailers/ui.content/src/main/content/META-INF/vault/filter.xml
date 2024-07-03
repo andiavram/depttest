@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/conf/movietrailers" mode="merge"/>
+    <filter root="/content/movietrailers" mode="merge"/>
+    <filter root="/content/dam/movietrailers" mode="merge">
+        <exclude pattern="/content/dam/movietrailers(/.*)?"/>
+        <include pattern="/content/dam/movietrailers/jcr:content(/.*)?"/>
+    </filter>
+    <filter root="/content/dam/movietrailers/asset.jpg" mode="merge"/>
+    <filter root="/content/experience-fragments/movietrailers" mode="merge"/>
+</workspaceFilter>
