@@ -17,7 +17,7 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
 
     @Override
-    public TMDBResponseBean callTMDB () throws IOException, InterruptedException {
+    public TMDBResponseBean callTMDB (String apiKey) throws IOException, InterruptedException {
         ObjectMapper objectMapper = new ObjectMapper();
         TMDBResponseBean formattedResult = null;
 
@@ -29,13 +29,12 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(theUrl))
             .GET()
-            .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NzVlZDk2MTNlNGIyY2VlNjk3ZTU0MTdmNjU3NmExNCIsIm5iZiI6MTcxOTk4ODQwMC4zODIyMDUsInN1YiI6IjY2ODRlZmFlNDU5Nzc4OTZkYTFmNzAxMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7ZXayVRAilcyKTLIyBSFU_NUTTCDDdoFybJsA-MRyEY")
+            .header("Authorization", "Bearer " + apiKey)
             .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // TODO check that the response status is 200
-        if (response != null && response.body() != null) {
+        if (response != null && response.statusCode() == 200 && response.body() != null) {
             try {
                 formattedResult = objectMapper.readValue(response.body(), TMDBResponseBean.class);
             } catch (JsonProcessingException e) {

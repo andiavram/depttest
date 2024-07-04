@@ -1,4 +1,4 @@
-package com.movietrailers.core.servlets;
+package com.movietrailers.core.service;
 
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;

@@ -5,5 +5,5 @@ import com.movietrailers.core.beans.TMDBResponseBean;
 import java.io.IOException;
 
 public interface SearchMoviesService {
-    TMDBResponseBean callTMDB () throws IOException, InterruptedException;
+    TMDBResponseBean callTMDB (String apiKey) throws IOException, InterruptedException;
 }
