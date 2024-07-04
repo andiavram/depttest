@@ -11,11 +11,16 @@
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="granite/ui/components/coral/foundation/container">
                 <items jcr:primaryType="nt:unstructured">
-                    <apiKey
+                    <TMDBApiKey
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                         fieldLabel="TMDB API Key"
-                        name="./apiKey"/>
+                        name="./TMDBApiKey"/>
+                    <youtubeApiKey
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Youtube API Key"
+                            name="./youtubeApiKey"/>
                 </items>
             </column>
         </items>
