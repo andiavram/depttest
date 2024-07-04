@@ -24,9 +24,6 @@ public class SearchYoutubeTrailerServiceImpl implements SearchYoutubeTrailerServ
         String theUrl = "https://www.googleapis.com/youtube/v3/search?key=" + apiKey + "&q=" + query;
         HttpClient client = HttpClient.newHttpClient();
 
-//        String encoded = java.net.URLEncoder.encode("https://www.googleapis.com/youtube/v3/search?key=" + apiKey + "&q=" + query, "UTF-8").replace("+", "%20");
-
-
         // TODO pass API key from an OSGI config
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(theUrl))

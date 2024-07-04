@@ -1,6 +1,6 @@
 package com.movietrailers.core.models;
 
-import com.day.cq.wcm.api.Page;
+import com.movietrailers.core.beans.TMDBMovieDetailsBean;
 import com.movietrailers.core.beans.TMDBResponseBean;
 import com.movietrailers.core.beans.YoutubeResponseBean;
 import com.movietrailers.core.service.SearchMoviesService;
@@ -10,15 +10,12 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Required;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.Objects;
 
 @Model(adaptables = SlingHttpServletRequest.class,
     resourceType = "movietrailers/components/searchmovies",
@@ -37,6 +34,22 @@ public class SearchMoviesModel {
     private String TMDBApiKey;
     @ValueMapValue(name = "youtubeApiKey")
     private String youtubeApiKey;
+    @ValueMapValue(name = "resultsIntroduction")
+    private String resultsIntroduction;
+    @ValueMapValue(name = "resultsFieldsDescription")
+    private String resultsFieldsDescription;
+    @ValueMapValue(name = "movieTitleLabel")
+    private String movieTitleLabel;
+    @ValueMapValue(name = "movieLanguageLabel")
+    private String movieLanguageLabel;
+    @ValueMapValue(name = "movieOverviewLabel")
+    private String movieOverviewLabel;
+    @ValueMapValue(name = "movieReleaseDateLabel")
+    private String movieReleaseDateLabel;
+    @ValueMapValue(name = "movieRatingLabel")
+    private String movieRatingLabel;
+    @ValueMapValue(name = "movieRatingCountLabel")
+    private String movieRatingCountLabel;
 
     @OSGiService
     private SearchMoviesService moviesService;
@@ -44,9 +57,12 @@ public class SearchMoviesModel {
     @OSGiService
     private SearchYoutubeTrailerService youtubeService;
 
-    private String message;
-
     private String movieTitle = StringUtils.EMPTY;
+    private String movieLanguage = StringUtils.EMPTY;
+    private String movieOverview = StringUtils.EMPTY;
+    private String movieReleaseDate = StringUtils.EMPTY;
+    private String movieRating = StringUtils.EMPTY;
+    private String movieRatingCount = StringUtils.EMPTY;
 
     private String youtubeVideoId;
 
@@ -60,8 +76,6 @@ public class SearchMoviesModel {
 
     @PostConstruct
     protected void init() throws IOException, InterruptedException {
-        message = "sorry something went wrong and we cannot retrieve the movie information";
-
         query = getObtainQueryParameterFromPage();
         if(!query.equals(StringUtils.EMPTY)) {
             emptyResults = false;
@@ -72,22 +86,29 @@ public class SearchMoviesModel {
             query = formatTextForURICreation(query);
             TMDBResponseBean callResult = moviesService.callTMDB(TMDBApiKey, query);
             if(callResult != null) {
-                movieTitle = callResult.getResults().get(0).getTitle();
 
-                if(!movieTitle.equals(StringUtils.EMPTY)) {
-                    movieTitle = formatTextForURICreation(movieTitle);
-                    YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(youtubeApiKey, movieTitle + "+trailer");
-                    if(youtubeCallResult != null) {
-                        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(0) != null && youtubeCallResult.getItems().get(0).getId()!= null && youtubeCallResult.getItems().get(0).getId().getVideoId() != null) {
-                            youtubeVideoId = youtubeCallResult.getItems().get(0).getId().getVideoId();
-                        } else {
-                            emptyResults = true;
-                        }
+                TMDBMovieDetailsBean mostRelevantMovie = callResult.getResults().get(0);
+                movieTitle = mostRelevantMovie.getTitle();
+                movieLanguage = mostRelevantMovie.getOriginal_language();
+                movieOverview = mostRelevantMovie.getOverview();
+                movieReleaseDate = mostRelevantMovie.getRelease_date();
+                movieRating = mostRelevantMovie.getVote_average();
+                movieRatingCount = mostRelevantMovie.getVote_count();
 
-                    } else {
-                        emptyResults = true;
-                    }
-                }
+//                if(!movieTitle.equals(StringUtils.EMPTY)) {
+//                    movieTitle = formatTextForURICreation(movieTitle);
+//                    YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(youtubeApiKey, movieTitle + "+trailer");
+//                    if(youtubeCallResult != null) {
+//                        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(0) != null && youtubeCallResult.getItems().get(0).getId()!= null && youtubeCallResult.getItems().get(0).getId().getVideoId() != null) {
+//                            youtubeVideoId = youtubeCallResult.getItems().get(0).getId().getVideoId();
+//                        } else {
+//                            emptyResults = true;
+//                        }
+//
+//                    } else {
+//                        emptyResults = true;
+//                    }
+//                }
 
             } else {
                 emptyResults = true;
@@ -95,7 +116,7 @@ public class SearchMoviesModel {
 
         }
 
-//        youtubeVideoId = "VuCEYInNNKg";
+        youtubeVideoId = "VuCEYInNNKg";
 
         int x = 0;
     }
@@ -119,10 +140,6 @@ public class SearchMoviesModel {
         return query;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
     public String getYoutubeVideoId() {
         return youtubeVideoId;
     }
@@ -141,5 +158,61 @@ public class SearchMoviesModel {
 
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    public String getResultsIntroduction() {
+        return resultsIntroduction;
+    }
+
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+
+    public String getMovieLanguage() {
+        return movieLanguage;
+    }
+
+    public String getMovieOverview() {
+        return movieOverview;
+    }
+
+    public String getMovieReleaseDate() {
+        return movieReleaseDate;
+    }
+
+    public String getMovieRating() {
+        return movieRating;
+    }
+
+    public String getMovieRatingCount() {
+        return movieRatingCount;
+    }
+
+    public String getResultsFieldsDescription() {
+        return resultsFieldsDescription;
+    }
+
+    public String getMovieTitleLabel() {
+        return movieTitleLabel;
+    }
+
+    public String getMovieLanguageLabel() {
+        return movieLanguageLabel;
+    }
+
+    public String getMovieOverviewLabel() {
+        return movieOverviewLabel;
+    }
+
+    public String getMovieReleaseDateLabel() {
+        return movieReleaseDateLabel;
+    }
+
+    public String getMovieRatingLabel() {
+        return movieRatingLabel;
+    }
+
+    public String getMovieRatingCountLabel() {
+        return movieRatingCountLabel;
     }
 }

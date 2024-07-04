@@ -19,8 +19,28 @@
 
     <!--    Display this block in case we do have results to display-->
     <div class="results-container" data-sly-test="${!model.emptyResults}">
+        <div class="results-properties">
+            <h3 class="results-introduction" data-sly-test="${model.resultsIntroduction}">${model.resultsIntroduction}</h3>
+            <h4 class="results-fields-description" data-sly-test="${model.resultsFieldsDescription}">${model.resultsFieldsDescription}</h4>
+            <p class="results-field" data-sly-test="${model.movieTitle}">${model.movieTitleLabel} ${model.movieTitle}</p>
+            <p class="results-field" data-sly-test="${model.movieOverview}">${model.movieOverviewLabel} ${model.movieOverview}</p>
+            <p class="results-field" data-sly-test="${model.movieLanguage}">${model.movieLanguageLabel} ${model.movieLanguage}</p>
+            <p class="results-field" data-sly-test="${model.movieReleaseDate}">${model.movieReleaseDateLabel} ${model.movieReleaseDate}</p>
+            <p class="results-field" data-sly-test="${model.movieRatingLabel}">${model.movieRatingLabel} ${model.movieRating}</p>
+            <p class="results-field" data-sly-test="${model.movieRatingCount}">${model.movieRatingCountLabel} ${model.movieRatingCount}</p>
+        </div>
+
+
         <div class="results-trailers">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/${model.youtubeVideoId}" title="YouTube trailer for my top movie result" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <div class="results-trailer">
+                <iframe width="300" height="170" src="https://www.youtube.com/embed/${model.youtubeVideoId}" title="YouTube trailer for my top movie result" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="results-trailer">
+                <iframe width="300" height="170" src="https://www.youtube.com/embed/${model.youtubeVideoId}" title="YouTube trailer for my top movie result" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <div class="results-trailer">
+                <iframe width="300" height="170" src="https://www.youtube.com/embed/${model.youtubeVideoId}" title="YouTube trailer for my top movie result" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
         </div>
     </div>
 

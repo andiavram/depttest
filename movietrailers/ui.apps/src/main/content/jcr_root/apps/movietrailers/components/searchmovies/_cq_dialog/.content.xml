@@ -21,11 +21,6 @@
                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                             fieldLabel="Youtube API Key"
                             name="./youtubeApiKey"/>
-                    <errorMessage
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Error message"
-                            name="./errorMessage"/>
                     <title
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -36,6 +31,51 @@
                             sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
                             fieldLabel="Description"
                             name="./description"/>
+                    <errorMessage
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Error message"
+                            name="./errorMessage"/>
+                    <resultsIntroduction
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Results Introduction Text"
+                            name="./resultsIntroduction"/>
+                    <resultsFieldsDescription
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Results Fields Description Text"
+                            name="./resultsFieldsDescription"/>
+                    <movieTitleLabel
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Most Relevant Movie Title Label"
+                            name="./movieTitleLabel"/>
+                    <movieLanguageLabel
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Most Relevant Movie Language Label"
+                            name="./movieLanguageLabel"/>
+                    <movieOverviewLabel
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Most Relevant Movie Overview Label"
+                            name="./movieOverviewLabel"/>
+                    <movieReleaseDateLabel
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Most Relevant Movie Release Date Label"
+                            name="./movieReleaseDateLabel"/>
+                    <movieRatingLabel
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Most Relevant Movie Rating Label"
+                            name="./movieRatingLabel"/>
+                    <movieRatingCountLabel
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Most Relevant Movie Rating Count Label"
+                            name="./movieRatingCountLabel"/>
                 </items>
             </column>
         </items>

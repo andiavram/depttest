@@ -8,7 +8,6 @@ import org.osgi.service.component.annotations.Component;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -22,7 +21,6 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
         ObjectMapper objectMapper = new ObjectMapper();
         TMDBResponseBean formattedResult = null;
 
-        // TODO pass query from an input field
         String theUrl = "https://api.themoviedb.org/3/search/movie?include_adult=false&query=" + query;
         HttpClient client = HttpClient.newHttpClient();
 
