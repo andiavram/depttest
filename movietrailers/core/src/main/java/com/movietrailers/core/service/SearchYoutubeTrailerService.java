@@ -1,6 +1,5 @@
 package com.movietrailers.core.service;
 
-import com.movietrailers.core.beans.TMDBResponseBean;
 import com.movietrailers.core.beans.YoutubeResponseBean;
 
 import java.io.IOException;

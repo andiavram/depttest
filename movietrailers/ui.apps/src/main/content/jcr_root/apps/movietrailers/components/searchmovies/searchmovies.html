@@ -1,10 +1,28 @@
 <div class="cmp-searchmovies" data-cmp-is="searchmovies" data-sly-use.model="com.movietrailers.core.models.SearchMoviesModel">
-    <p>This is the search movies component</p>
 
-    <div>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/${model.youtubeVideoId}" title="YouTube trailer for my top movie result" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div class="introduction-container">
+        <h2 class="introduction-title" data-sly-test="${model.title}">${model.title}</h2>
+        <p class="introduction-description" data-sly-test="${model.description}">${model.description}</p>
     </div>
 
-    <div>TEST: ${model.message}</div>
+    <div class="search-container">
+        <form>
+            <input class="search-field" type="text" id="query" name="query"/>
+            <input class="search-button" type="submit" value="Search for Movies"/>
+        </form>
+    </div>
+
+    <!--    Display this block in case we do not have any results to display-->
+    <div class="error-container" data-sly-test="${model.emptyResults}">
+        <p class="error-message" data-sly-test="${model.errorMessage}">${model.errorMessage}</p>
+    </div>
+
+    <!--    Display this block in case we do have results to display-->
+    <div class="results-container" data-sly-test="${!model.emptyResults}">
+        <div class="results-trailers">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/${model.youtubeVideoId}" title="YouTube trailer for my top movie result" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+
 
 </div>

@@ -8,6 +8,7 @@ import org.osgi.service.component.annotations.Component;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -17,12 +18,12 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
 
     @Override
-    public TMDBResponseBean callTMDB (String apiKey) throws IOException, InterruptedException {
+    public TMDBResponseBean callTMDB (String apiKey, String query) throws IOException, InterruptedException {
         ObjectMapper objectMapper = new ObjectMapper();
         TMDBResponseBean formattedResult = null;
 
         // TODO pass query from an input field
-        String theUrl = "https://api.themoviedb.org/3/search/movie?include_adult=false&query=minions";
+        String theUrl = "https://api.themoviedb.org/3/search/movie?include_adult=false&query=" + query;
         HttpClient client = HttpClient.newHttpClient();
 
         // TODO pass API key from an OSGI config
