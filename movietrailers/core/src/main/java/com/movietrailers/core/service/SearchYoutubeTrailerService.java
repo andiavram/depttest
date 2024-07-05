@@ -8,5 +8,5 @@ import java.io.IOException;
  * Interface for defining the Youtube API call
  */
 public interface SearchYoutubeTrailerService {
-    YoutubeResponseBean callYoutubeSearchForVideoId (String apiKey, String query) throws IOException, InterruptedException;
+    YoutubeResponseBean callYoutubeSearchForVideoId (String query, int maxResults) throws IOException, InterruptedException;
 }

@@ -35,10 +35,6 @@ public class SearchMoviesModel {
     private String description;
     @ValueMapValue(name = "errorMessage")
     private String errorMessage;
-    @ValueMapValue(name = "TMDBApiKey")
-    private String TMDBApiKey;
-    @ValueMapValue(name = "youtubeApiKey")
-    private String youtubeApiKey;
     @ValueMapValue(name = "resultsIntroduction")
     private String resultsIntroduction;
     @ValueMapValue(name = "resultsFieldsDescription")
@@ -81,7 +77,7 @@ public class SearchMoviesModel {
         }
         if(!query.equals(StringUtils.EMPTY)) {
             query = formatTextForURICreation(query);
-            TMDBResponseBean callResult = moviesService.callTMDB(TMDBApiKey, query);
+            TMDBResponseBean callResult = moviesService.callTMDB(query);
             if(callResult != null) {
                 setMostRelevantMovieProperties(callResult);
                 obtainMostRelevantYoutubeIds();
@@ -129,7 +125,7 @@ public class SearchMoviesModel {
     private void obtainMostRelevantYoutubeIds() throws IOException, InterruptedException {
         if(!mostRelevantMovieTitle.equals(StringUtils.EMPTY)) {
             String formattedMovieTitle = formatTextForURICreation(mostRelevantMovieTitle);
-            YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(youtubeApiKey, formattedMovieTitle + TRAILER_SEARCH_TERM);
+            YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(formattedMovieTitle + TRAILER_SEARCH_TERM, MAXIMUM_NUMBER_OF_TRAILERS);
             if(youtubeCallResult != null) {
                 List<String> videoIds = new ArrayList<>();
                 for (int i = 0 ; i < MAXIMUM_NUMBER_OF_TRAILERS ; i++) {

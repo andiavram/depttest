@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movietrailers.core.beans.YoutubeResponseBean;
 import com.movietrailers.core.service.SearchYoutubeTrailerService;
+import com.movietrailers.core.service.YoutubeConfigService;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,26 +22,29 @@ import static com.movietrailers.core.constants.MovieTrailersConstants.*;
 @Component(service = SearchYoutubeTrailerService.class)
 public class SearchYoutubeTrailerServiceImpl implements SearchYoutubeTrailerService {
 
+    @Reference
+    private transient YoutubeConfigService config;
 
     @Override
-    public YoutubeResponseBean callYoutubeSearchForVideoId (String apiKey, String query) throws IOException, InterruptedException {
+    public YoutubeResponseBean callYoutubeSearchForVideoId (String query, int maxResults) throws IOException, InterruptedException {
         ObjectMapper objectMapper = new ObjectMapper();
         YoutubeResponseBean formattedResult = null;
 
-        String theUrl = YOUTUBE_SEARCH_API_CALL_URL_PATH + apiKey + YOUTUBE_SEARCH_API_QUERY_MARKER + query;
-        HttpClient client = HttpClient.newHttpClient();
-        // TODO pass API key from an OSGI config
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(theUrl))
-            .GET()
-            .build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if(config != null && config.apiKeyYoutube() != null && !config.apiKeyYoutube().isEmpty()) {
+            String theUrl = YOUTUBE_SEARCH_API_CALL_URL_PATH + config.apiKeyYoutube() + YOUTUBE_SEARCH_API_QUERY_MARKER + query + YOUTUBE_SEARCH_API_MAX_RESULTS_MARKER + maxResults;
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                                             .uri(URI.create(theUrl))
+                                             .GET()
+                                             .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response != null && response.statusCode() == 200 && response.body() != null) {
-            try {
-                formattedResult = objectMapper.readValue(response.body(), YoutubeResponseBean.class);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+            if (response != null && response.statusCode() == 200 && response.body() != null) {
+                try {
+                    formattedResult = objectMapper.readValue(response.body(), YoutubeResponseBean.class);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 

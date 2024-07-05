@@ -17,6 +17,7 @@ public final class MovieTrailersConstants {
     public static final String TMDB_BEARER = "Bearer ";
     public static final String YOUTUBE_SEARCH_API_CALL_URL_PATH = "https://www.googleapis.com/youtube/v3/search?key=";
     public static final String YOUTUBE_SEARCH_API_QUERY_MARKER = "&q=";
+    public static final String YOUTUBE_SEARCH_API_MAX_RESULTS_MARKER = "&maxResults=";
 
     private MovieTrailersConstants() {
     }

@@ -8,5 +8,5 @@ import java.io.IOException;
  * Interface for defining the TMDB API call
  */
 public interface SearchMoviesService {
-    TMDBResponseBean callTMDB (String apiKey, String query) throws IOException, InterruptedException;
+    TMDBResponseBean callTMDB (String query) throws IOException, InterruptedException;
 }

@@ -7,82 +7,101 @@
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
         <items jcr:primaryType="nt:unstructured">
-            <column
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="granite/ui/components/coral/foundation/container">
+            <tabs
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                    maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <TMDBApiKey
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldLabel="TMDB API Key"
-                        name="./TMDBApiKey"/>
-                    <youtubeApiKey
+                    <general-tab
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Youtube API Key"
-                            name="./youtubeApiKey"/>
-                    <title
+                            jcr:title="General"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <title
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Title"
+                                            name="./title"/>
+                                    <description
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                            fieldLabel="Description"
+                                            name="./description"/>
+                                    <errorMessage
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Error message"
+                                            name="./errorMessage"/>
+                                </items>
+                            </column>
+                        </items>
+                    </general-tab>
+                    <results-tab
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Title"
-                            name="./title"/>
-                    <description
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
-                            fieldLabel="Description"
-                            name="./description"/>
-                    <errorMessage
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Error message"
-                            name="./errorMessage"/>
-                    <resultsIntroduction
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Results Introduction Text"
-                            name="./resultsIntroduction"/>
-                    <resultsFieldsDescription
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Results Fields Description Text"
-                            name="./resultsFieldsDescription"/>
-                    <otherMoviesTitle
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Results Other Movies Title"
-                            name="./otherMoviesTitle"/>
-                    <movieTitleLabel
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Most Relevant Movie Title Label"
-                            name="./movieTitleLabel"/>
-                    <movieLanguageLabel
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Most Relevant Movie Language Label"
-                            name="./movieLanguageLabel"/>
-                    <movieOverviewLabel
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Most Relevant Movie Overview Label"
-                            name="./movieOverviewLabel"/>
-                    <movieReleaseDateLabel
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Most Relevant Movie Release Date Label"
-                            name="./movieReleaseDateLabel"/>
-                    <movieRatingLabel
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Most Relevant Movie Rating Label"
-                            name="./movieRatingLabel"/>
-                    <movieRatingCountLabel
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                            fieldLabel="Most Relevant Movie Rating Count Label"
-                            name="./movieRatingCountLabel"/>
+                            jcr:title="Results"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <resultsIntroduction
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Results Introduction Text"
+                                            name="./resultsIntroduction"/>
+                                    <resultsFieldsDescription
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Results Fields Description Text"
+                                            name="./resultsFieldsDescription"/>
+                                    <otherMoviesTitle
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Results Other Movies Title"
+                                            name="./otherMoviesTitle"/>
+                                    <movieTitleLabel
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Most Relevant Movie Title Label"
+                                            name="./movieTitleLabel"/>
+                                    <movieLanguageLabel
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Most Relevant Movie Language Label"
+                                            name="./movieLanguageLabel"/>
+                                    <movieOverviewLabel
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Most Relevant Movie Overview Label"
+                                            name="./movieOverviewLabel"/>
+                                    <movieReleaseDateLabel
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Most Relevant Movie Release Date Label"
+                                            name="./movieReleaseDateLabel"/>
+                                    <movieRatingLabel
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Most Relevant Movie Rating Label"
+                                            name="./movieRatingLabel"/>
+                                    <movieRatingCountLabel
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldLabel="Most Relevant Movie Rating Count Label"
+                                            name="./movieRatingCountLabel"/>
+                                </items>
+                            </column>
+                        </items>
+                    </results-tab>
                 </items>
-            </column>
+            </tabs>
         </items>
     </content>
 </jcr:root>
