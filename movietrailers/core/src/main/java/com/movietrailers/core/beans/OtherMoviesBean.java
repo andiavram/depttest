@@ -3,6 +3,9 @@ package com.movietrailers.core.beans;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 
+/**
+ * Bean for defining the Other Movies List
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OtherMoviesBean {
 

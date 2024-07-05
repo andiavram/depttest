@@ -2,6 +2,9 @@ package com.movietrailers.core.beans;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * Bean for defining Youtube Item Properties
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class YoutubeItemBean {
 

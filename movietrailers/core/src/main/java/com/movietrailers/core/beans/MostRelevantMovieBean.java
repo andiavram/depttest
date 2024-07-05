@@ -5,6 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+/**
+ * Bean for defining the Most Relevant Movie Properties
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MostRelevantMovieBean {
 

@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
 
+/**
+ * Bean for defining the TMDB Response Properties
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TMDBResponseBean {
 

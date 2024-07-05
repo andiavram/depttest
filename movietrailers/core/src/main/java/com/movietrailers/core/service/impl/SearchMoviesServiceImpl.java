@@ -12,6 +12,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import static com.movietrailers.core.constants.MovieTrailersConstants.*;
+
+/**
+ * Class for defining the TMDB API call
+ */
 @Component(service = SearchMoviesService.class)
 public class SearchMoviesServiceImpl implements SearchMoviesService {
 
@@ -21,16 +26,14 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
         ObjectMapper objectMapper = new ObjectMapper();
         TMDBResponseBean formattedResult = null;
 
-        String theUrl = "https://api.themoviedb.org/3/search/movie?include_adult=false&query=" + query;
+        String theUrl = TMDB_API_CALL_URL_PATH + query;
         HttpClient client = HttpClient.newHttpClient();
-
         // TODO pass API key from an OSGI config
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(theUrl))
             .GET()
-            .header("Authorization", "Bearer " + apiKey)
+            .header(TMDB_AUTHORIZATION, TMDB_BEARER + apiKey)
             .build();
-
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response != null && response.statusCode() == 200 && response.body() != null) {
@@ -40,6 +43,7 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
                 throw new RuntimeException(e);
             }
         }
+
         return formattedResult;
     }
 

@@ -17,8 +17,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.movietrailers.core.constants.MovieTrailersConstants.*;
+
+/**
+ * Model for defining the Search Movies Component functionality
+ */
 @Model(adaptables = SlingHttpServletRequest.class,
-    resourceType = "movietrailers/components/searchmovies",
+    resourceType = SEARCH_MOVIE_COMPONENT_PATH,
     defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class SearchMoviesModel {
 
@@ -89,6 +94,66 @@ public class SearchMoviesModel {
         }
     }
 
+    private String getObtainQueryParameterFromPage() {
+        String query = StringUtils.EMPTY;
+        if (request != null) {
+            RequestParameter parameter = request.getRequestParameter(QUERY);
+            if (parameter != null && parameter.getString() != StringUtils.EMPTY) {
+                query = parameter.getString();
+            }
+        }
+        return query;
+    }
+
+    private String formatTextForURICreation(String text) {
+        String result = text;
+        if (text.contains(SPACE)) {
+            result = text.replaceAll(SPACE, PLUS);
+        }
+        return result;
+    }
+
+    private void setMostRelevantMovieProperties(TMDBResponseBean callResult) {
+        if(callResult != null && callResult.getResults() != null && callResult.getResults().get(MOST_RELEVANT_RESULT_INDEX) != null) {
+            TMDBMovieDetailsBean mostRelevantMovie = callResult.getResults().get(MOST_RELEVANT_RESULT_INDEX);
+            mostRelevantMovieTitle = mostRelevantMovie.getTitle();
+            mostRelevantMovieBuilder.withTitle(mostRelevantMovie.getTitle());
+            mostRelevantMovieBuilder.withLanguage(mostRelevantMovie.getOriginal_language());
+            mostRelevantMovieBuilder.withOverview(mostRelevantMovie.getOverview());
+            mostRelevantMovieBuilder.withReleaseDate(mostRelevantMovie.getRelease_date());
+            mostRelevantMovieBuilder.withRating(mostRelevantMovie.getVote_average());
+            mostRelevantMovieBuilder.withRatingCount(mostRelevantMovie.getVote_count());
+        }
+    }
+
+    private void obtainMostRelevantYoutubeIds() throws IOException, InterruptedException {
+        if(!mostRelevantMovieTitle.equals(StringUtils.EMPTY)) {
+            String formattedMovieTitle = formatTextForURICreation(mostRelevantMovieTitle);
+            YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(youtubeApiKey, formattedMovieTitle + TRAILER_SEARCH_TERM);
+            if(youtubeCallResult != null) {
+                List<String> videoIds = new ArrayList<>();
+                for (int i = 0 ; i < MAXIMUM_NUMBER_OF_TRAILERS ; i++) {
+                    String id = obtainVideoId(youtubeCallResult, i);
+                    if (!id.isEmpty()) {
+                        videoIds.add(id);
+                    }
+                }
+                if (!videoIds.isEmpty()) {
+                    mostRelevantMovieBuilder.withVideoIds(videoIds);
+                }
+            }
+        } else {
+            emptyResults = true;
+        }
+    }
+
+    private String obtainVideoId(YoutubeResponseBean youtubeCallResult, int index) {
+        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(index) != null && youtubeCallResult.getItems().get(index).getId()!= null && youtubeCallResult.getItems().get(index).getId().getVideoId() != null) {
+            return youtubeCallResult.getItems().get(index).getId().getVideoId();
+        }
+        return StringUtils.EMPTY;
+    }
+
     private void setOtherMoviesProperties(TMDBResponseBean callResult) {
         if(callResult != null && callResult.getResults() != null) {
             List<OtherMoviePropertiesBean> otherMovies = new ArrayList<>();
@@ -111,66 +176,6 @@ public class SearchMoviesModel {
         builder.withReleaseDate(movie.getRelease_date());
         builder.withRating(movie.getVote_average());
         return new OtherMoviePropertiesBean(builder);
-    }
-
-    private void obtainMostRelevantYoutubeIds() throws IOException, InterruptedException {
-        if(!mostRelevantMovieTitle.equals(StringUtils.EMPTY)) {
-            String formattedMovieTitle = formatTextForURICreation(mostRelevantMovieTitle);
-            YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(youtubeApiKey, formattedMovieTitle + "+trailer");
-            if(youtubeCallResult != null) {
-                List<String> videoIds = new ArrayList<>();
-                for (int i = 0 ; i < 3 ; i++) {
-                    String id = obtainVideoId(youtubeCallResult, i);
-                    if (!id.isEmpty()) {
-                        videoIds.add(id);
-                    }
-                }
-                if (!videoIds.isEmpty()) {
-                    mostRelevantMovieBuilder.withVideoIds(videoIds);
-                }
-            }
-        } else {
-            emptyResults = true;
-        }
-    }
-
-    private String obtainVideoId(YoutubeResponseBean youtubeCallResult, int index) {
-        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(index) != null && youtubeCallResult.getItems().get(index).getId()!= null && youtubeCallResult.getItems().get(index).getId().getVideoId() != null) {
-            return youtubeCallResult.getItems().get(index).getId().getVideoId();
-        }
-        return StringUtils.EMPTY;
-    }
-
-    private void setMostRelevantMovieProperties(TMDBResponseBean callResult) {
-        if(callResult != null && callResult.getResults() != null && callResult.getResults().get(0) != null) {
-            TMDBMovieDetailsBean mostRelevantMovie = callResult.getResults().get(0);
-            mostRelevantMovieTitle = mostRelevantMovie.getTitle();
-            mostRelevantMovieBuilder.withTitle(mostRelevantMovie.getTitle());
-            mostRelevantMovieBuilder.withLanguage(mostRelevantMovie.getOriginal_language());
-            mostRelevantMovieBuilder.withOverview(mostRelevantMovie.getOverview());
-            mostRelevantMovieBuilder.withReleaseDate(mostRelevantMovie.getRelease_date());
-            mostRelevantMovieBuilder.withRating(mostRelevantMovie.getVote_average());
-            mostRelevantMovieBuilder.withRatingCount(mostRelevantMovie.getVote_count());
-        }
-    }
-
-    private String formatTextForURICreation(String text) {
-        String result = text;
-        if (text.contains(" ")) {
-            result = text.replaceAll(" ", "+");
-        }
-        return result;
-    }
-
-    private String getObtainQueryParameterFromPage() {
-        String query = StringUtils.EMPTY;
-        if (request != null) {
-            RequestParameter parameter = request.getRequestParameter("query");
-            if (parameter != null && parameter.getString() != StringUtils.EMPTY) {
-                query = parameter.getString();
-            }
-        }
-        return query;
     }
 
     public MostRelevantMovieBean getMostRelevantMovie() {

@@ -3,6 +3,9 @@ package com.movietrailers.core.beans;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Bean for defining the Other Movies Properties
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OtherMoviePropertiesBean {
 
