@@ -64,7 +64,9 @@ public class SearchMoviesModel {
     private String movieRating = StringUtils.EMPTY;
     private String movieRatingCount = StringUtils.EMPTY;
 
-    private String youtubeVideoId;
+    private String youtubeVideoId1 = StringUtils.EMPTY;
+    private String youtubeVideoId2 = StringUtils.EMPTY;
+    private String youtubeVideoId3 = StringUtils.EMPTY;
 
     private String query = StringUtils.EMPTY;
 
@@ -95,28 +97,30 @@ public class SearchMoviesModel {
                 movieRating = mostRelevantMovie.getVote_average();
                 movieRatingCount = mostRelevantMovie.getVote_count();
 
-//                if(!movieTitle.equals(StringUtils.EMPTY)) {
-//                    movieTitle = formatTextForURICreation(movieTitle);
-//                    YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(youtubeApiKey, movieTitle + "+trailer");
-//                    if(youtubeCallResult != null) {
-//                        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(0) != null && youtubeCallResult.getItems().get(0).getId()!= null && youtubeCallResult.getItems().get(0).getId().getVideoId() != null) {
-//                            youtubeVideoId = youtubeCallResult.getItems().get(0).getId().getVideoId();
-//                        } else {
-//                            emptyResults = true;
-//                        }
-//
-//                    } else {
-//                        emptyResults = true;
-//                    }
-//                }
-
+                if(!movieTitle.equals(StringUtils.EMPTY)) {
+                    movieTitle = formatTextForURICreation(movieTitle);
+                    YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(youtubeApiKey, movieTitle + "+trailer");
+                    if(youtubeCallResult != null) {
+                        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(0) != null && youtubeCallResult.getItems().get(0).getId()!= null && youtubeCallResult.getItems().get(0).getId().getVideoId() != null) {
+                            youtubeVideoId1 = youtubeCallResult.getItems().get(0).getId().getVideoId();
+                        }
+                        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(1) != null && youtubeCallResult.getItems().get(1).getId()!= null && youtubeCallResult.getItems().get(1).getId().getVideoId() != null) {
+                            youtubeVideoId2 = youtubeCallResult.getItems().get(1).getId().getVideoId();
+                        }
+                        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(2) != null && youtubeCallResult.getItems().get(2).getId()!= null && youtubeCallResult.getItems().get(2).getId().getVideoId() != null) {
+                            youtubeVideoId3 = youtubeCallResult.getItems().get(2).getId().getVideoId();
+                        }
+                    }
+                } else {
+                    emptyResults = true;
+                }
             } else {
                 emptyResults = true;
             }
 
         }
 
-        youtubeVideoId = "VuCEYInNNKg";
+//        youtubeVideoId1 = "VuCEYInNNKg";
 
         int x = 0;
     }
@@ -140,8 +144,16 @@ public class SearchMoviesModel {
         return query;
     }
 
-    public String getYoutubeVideoId() {
-        return youtubeVideoId;
+    public String getYoutubeVideoId1() {
+        return youtubeVideoId1;
+    }
+
+    public String getYoutubeVideoId2() {
+        return youtubeVideoId2;
+    }
+
+    public String getYoutubeVideoId3() {
+        return youtubeVideoId3;
     }
 
     public boolean isEmptyResults() {
