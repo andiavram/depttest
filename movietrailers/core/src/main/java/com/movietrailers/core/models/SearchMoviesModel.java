@@ -1,8 +1,6 @@
 package com.movietrailers.core.models;
 
-import com.movietrailers.core.beans.TMDBMovieDetailsBean;
-import com.movietrailers.core.beans.TMDBResponseBean;
-import com.movietrailers.core.beans.YoutubeResponseBean;
+import com.movietrailers.core.beans.*;
 import com.movietrailers.core.service.SearchMoviesService;
 import com.movietrailers.core.service.SearchYoutubeTrailerService;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +14,8 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Model(adaptables = SlingHttpServletRequest.class,
     resourceType = "movietrailers/components/searchmovies",
@@ -38,6 +38,8 @@ public class SearchMoviesModel {
     private String resultsIntroduction;
     @ValueMapValue(name = "resultsFieldsDescription")
     private String resultsFieldsDescription;
+    @ValueMapValue(name = "otherMoviesTitle")
+    private String otherMoviesTitle;
     @ValueMapValue(name = "movieTitleLabel")
     private String movieTitleLabel;
     @ValueMapValue(name = "movieLanguageLabel")
@@ -53,28 +55,18 @@ public class SearchMoviesModel {
 
     @OSGiService
     private SearchMoviesService moviesService;
-
     @OSGiService
     private SearchYoutubeTrailerService youtubeService;
-
-    private String movieTitle = StringUtils.EMPTY;
-    private String movieLanguage = StringUtils.EMPTY;
-    private String movieOverview = StringUtils.EMPTY;
-    private String movieReleaseDate = StringUtils.EMPTY;
-    private String movieRating = StringUtils.EMPTY;
-    private String movieRatingCount = StringUtils.EMPTY;
-
-    private String youtubeVideoId1 = StringUtils.EMPTY;
-    private String youtubeVideoId2 = StringUtils.EMPTY;
-    private String youtubeVideoId3 = StringUtils.EMPTY;
-
-    private String query = StringUtils.EMPTY;
-
-    private boolean emptyResults = true;
-
-
     @Self
     private SlingHttpServletRequest request;
+
+    private String mostRelevantMovieTitle = StringUtils.EMPTY;
+    private String query = StringUtils.EMPTY;
+    private boolean emptyResults = true;
+    private MostRelevantMovieBean mostRelevantMovie;
+    private MostRelevantMovieBean.Builder mostRelevantMovieBuilder = new MostRelevantMovieBean.Builder();
+    private OtherMoviesBean otherMoviesToDisplay;
+    private OtherMoviesBean.Builder otherMoviesBuilder = new OtherMoviesBean.Builder();
 
     @PostConstruct
     protected void init() throws IOException, InterruptedException {
@@ -82,47 +74,84 @@ public class SearchMoviesModel {
         if(!query.equals(StringUtils.EMPTY)) {
             emptyResults = false;
         }
-
-
         if(!query.equals(StringUtils.EMPTY)) {
             query = formatTextForURICreation(query);
             TMDBResponseBean callResult = moviesService.callTMDB(TMDBApiKey, query);
             if(callResult != null) {
-
-                TMDBMovieDetailsBean mostRelevantMovie = callResult.getResults().get(0);
-                movieTitle = mostRelevantMovie.getTitle();
-                movieLanguage = mostRelevantMovie.getOriginal_language();
-                movieOverview = mostRelevantMovie.getOverview();
-                movieReleaseDate = mostRelevantMovie.getRelease_date();
-                movieRating = mostRelevantMovie.getVote_average();
-                movieRatingCount = mostRelevantMovie.getVote_count();
-
-                if(!movieTitle.equals(StringUtils.EMPTY)) {
-                    movieTitle = formatTextForURICreation(movieTitle);
-                    YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(youtubeApiKey, movieTitle + "+trailer");
-                    if(youtubeCallResult != null) {
-                        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(0) != null && youtubeCallResult.getItems().get(0).getId()!= null && youtubeCallResult.getItems().get(0).getId().getVideoId() != null) {
-                            youtubeVideoId1 = youtubeCallResult.getItems().get(0).getId().getVideoId();
-                        }
-                        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(1) != null && youtubeCallResult.getItems().get(1).getId()!= null && youtubeCallResult.getItems().get(1).getId().getVideoId() != null) {
-                            youtubeVideoId2 = youtubeCallResult.getItems().get(1).getId().getVideoId();
-                        }
-                        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(2) != null && youtubeCallResult.getItems().get(2).getId()!= null && youtubeCallResult.getItems().get(2).getId().getVideoId() != null) {
-                            youtubeVideoId3 = youtubeCallResult.getItems().get(2).getId().getVideoId();
-                        }
-                    }
-                } else {
-                    emptyResults = true;
-                }
+                setMostRelevantMovieProperties(callResult);
+                obtainMostRelevantYoutubeIds();
+                mostRelevantMovie = new MostRelevantMovieBean(mostRelevantMovieBuilder);
+                setOtherMoviesProperties(callResult);
             } else {
                 emptyResults = true;
             }
 
         }
+    }
 
-//        youtubeVideoId1 = "VuCEYInNNKg";
+    private void setOtherMoviesProperties(TMDBResponseBean callResult) {
+        if(callResult != null && callResult.getResults() != null) {
+            List<OtherMoviePropertiesBean> otherMovies = new ArrayList<>();
+            int i = 1;
+            while (i <= 10 && callResult.getResults().size() > i) {
+                if (callResult.getResults().get(i) != null) {
+                    otherMovies.add(obtainMovieProperties(callResult.getResults().get(i)));
+                }
+                i++;
+            }
+            otherMoviesBuilder.withOtherMovies(otherMovies);
+            otherMoviesToDisplay = new OtherMoviesBean(otherMoviesBuilder);
+        }
+     }
 
-        int x = 0;
+    private OtherMoviePropertiesBean obtainMovieProperties(TMDBMovieDetailsBean movie) {
+        OtherMoviePropertiesBean.Builder builder = new OtherMoviePropertiesBean.Builder();
+        builder.withTitle(movie.getTitle());
+        builder.withOverview(movie.getOverview());
+        builder.withReleaseDate(movie.getRelease_date());
+        builder.withRating(movie.getVote_average());
+        return new OtherMoviePropertiesBean(builder);
+    }
+
+    private void obtainMostRelevantYoutubeIds() throws IOException, InterruptedException {
+        if(!mostRelevantMovieTitle.equals(StringUtils.EMPTY)) {
+            String formattedMovieTitle = formatTextForURICreation(mostRelevantMovieTitle);
+            YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(youtubeApiKey, formattedMovieTitle + "+trailer");
+            if(youtubeCallResult != null) {
+                List<String> videoIds = new ArrayList<>();
+                for (int i = 0 ; i < 3 ; i++) {
+                    String id = obtainVideoId(youtubeCallResult, i);
+                    if (!id.isEmpty()) {
+                        videoIds.add(id);
+                    }
+                }
+                if (!videoIds.isEmpty()) {
+                    mostRelevantMovieBuilder.withVideoIds(videoIds);
+                }
+            }
+        } else {
+            emptyResults = true;
+        }
+    }
+
+    private String obtainVideoId(YoutubeResponseBean youtubeCallResult, int index) {
+        if (youtubeCallResult.getItems() != null & youtubeCallResult.getItems().get(index) != null && youtubeCallResult.getItems().get(index).getId()!= null && youtubeCallResult.getItems().get(index).getId().getVideoId() != null) {
+            return youtubeCallResult.getItems().get(index).getId().getVideoId();
+        }
+        return StringUtils.EMPTY;
+    }
+
+    private void setMostRelevantMovieProperties(TMDBResponseBean callResult) {
+        if(callResult != null && callResult.getResults() != null && callResult.getResults().get(0) != null) {
+            TMDBMovieDetailsBean mostRelevantMovie = callResult.getResults().get(0);
+            mostRelevantMovieTitle = mostRelevantMovie.getTitle();
+            mostRelevantMovieBuilder.withTitle(mostRelevantMovie.getTitle());
+            mostRelevantMovieBuilder.withLanguage(mostRelevantMovie.getOriginal_language());
+            mostRelevantMovieBuilder.withOverview(mostRelevantMovie.getOverview());
+            mostRelevantMovieBuilder.withReleaseDate(mostRelevantMovie.getRelease_date());
+            mostRelevantMovieBuilder.withRating(mostRelevantMovie.getVote_average());
+            mostRelevantMovieBuilder.withRatingCount(mostRelevantMovie.getVote_count());
+        }
     }
 
     private String formatTextForURICreation(String text) {
@@ -144,16 +173,12 @@ public class SearchMoviesModel {
         return query;
     }
 
-    public String getYoutubeVideoId1() {
-        return youtubeVideoId1;
+    public MostRelevantMovieBean getMostRelevantMovie() {
+        return mostRelevantMovie;
     }
 
-    public String getYoutubeVideoId2() {
-        return youtubeVideoId2;
-    }
-
-    public String getYoutubeVideoId3() {
-        return youtubeVideoId3;
+    public OtherMoviesBean getOtherMoviesToDisplay() {
+        return otherMoviesToDisplay;
     }
 
     public boolean isEmptyResults() {
@@ -176,32 +201,12 @@ public class SearchMoviesModel {
         return resultsIntroduction;
     }
 
-    public String getMovieTitle() {
-        return movieTitle;
-    }
-
-    public String getMovieLanguage() {
-        return movieLanguage;
-    }
-
-    public String getMovieOverview() {
-        return movieOverview;
-    }
-
-    public String getMovieReleaseDate() {
-        return movieReleaseDate;
-    }
-
-    public String getMovieRating() {
-        return movieRating;
-    }
-
-    public String getMovieRatingCount() {
-        return movieRatingCount;
-    }
-
     public String getResultsFieldsDescription() {
         return resultsFieldsDescription;
+    }
+
+    public String getOtherMoviesTitle() {
+        return otherMoviesTitle;
     }
 
     public String getMovieTitleLabel() {

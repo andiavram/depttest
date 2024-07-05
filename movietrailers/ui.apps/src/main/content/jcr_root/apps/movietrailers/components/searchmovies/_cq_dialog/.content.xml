@@ -46,6 +46,11 @@
                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                             fieldLabel="Results Fields Description Text"
                             name="./resultsFieldsDescription"/>
+                    <otherMoviesTitle
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Results Other Movies Title"
+                            name="./otherMoviesTitle"/>
                     <movieTitleLabel
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"

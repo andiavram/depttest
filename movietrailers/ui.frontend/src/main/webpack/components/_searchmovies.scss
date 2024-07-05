@@ -67,4 +67,34 @@
       }
     }
   }
+
+  .others-container {
+    .others-title {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 30px;
+    }
+
+    .others-teaser {
+
+      .others-movie {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border: 1px dotted white;
+        .others-title {
+          margin: 5px;
+          font-weight: bold;
+          font-size: 18px;
+        }
+        .others-details {
+          margin: 5px;
+          font-size: 10px;
+        }
+        .others-description {
+          margin: 5px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
 }

@@ -17,32 +17,36 @@
         <p class="error-message" data-sly-test="${model.errorMessage}">${model.errorMessage}</p>
     </div>
 
-    <!--    Display this block in case we do have results to display-->
+    <!--    Display this block in case we do have results to display, showing the most relevant movie-->
     <div class="results-container" data-sly-test="${!model.emptyResults}">
         <div class="results-properties">
             <h3 class="results-introduction" data-sly-test="${model.resultsIntroduction}">${model.resultsIntroduction}</h3>
             <h4 class="results-fields-description" data-sly-test="${model.resultsFieldsDescription}">${model.resultsFieldsDescription}</h4>
-            <p class="results-field" data-sly-test="${model.movieTitle}">${model.movieTitleLabel} ${model.movieTitle}</p>
-            <p class="results-field" data-sly-test="${model.movieOverview}">${model.movieOverviewLabel} ${model.movieOverview}</p>
-            <p class="results-field" data-sly-test="${model.movieLanguage}">${model.movieLanguageLabel} ${model.movieLanguage}</p>
-            <p class="results-field" data-sly-test="${model.movieReleaseDate}">${model.movieReleaseDateLabel} ${model.movieReleaseDate}</p>
-            <p class="results-field" data-sly-test="${model.movieRatingLabel}">${model.movieRatingLabel} ${model.movieRating}</p>
-            <p class="results-field" data-sly-test="${model.movieRatingCount}">${model.movieRatingCountLabel} ${model.movieRatingCount}</p>
+            <p class="results-field" data-sly-test="${model.mostRelevantMovie && model.mostRelevantMovie.title}">${model.movieTitleLabel} ${model.mostRelevantMovie.title}</p>
+            <p class="results-field" data-sly-test="${model.mostRelevantMovie && model.mostRelevantMovie.overview}">${model.movieOverviewLabel} ${model.mostRelevantMovie.overview}</p>
+            <p class="results-field" data-sly-test="${model.mostRelevantMovie && model.mostRelevantMovie.language}">${model.movieLanguageLabel} ${model.mostRelevantMovie.language}</p>
+            <p class="results-field" data-sly-test="${model.mostRelevantMovie && model.mostRelevantMovie.releaseDate}">${model.movieReleaseDateLabel} ${model.mostRelevantMovie.releaseDate}</p>
+            <p class="results-field" data-sly-test="${model.mostRelevantMovie && model.mostRelevantMovie.rating}">${model.movieRatingLabel} ${model.mostRelevantMovie.rating}</p>
+            <p class="results-field" data-sly-test="${model.mostRelevantMovie && model.mostRelevantMovie.ratingCount}">${model.movieRatingCountLabel} ${model.mostRelevantMovie.ratingCount}</p>
         </div>
-
-
-        <div class="results-trailers">
+        <div class="results-trailers" data-sly-test="${model.mostRelevantMovie && model.mostRelevantMovie.videoIds}" data-sly-list.child="${model.mostRelevantMovie.videoIds}">
             <div class="results-trailer">
-                <iframe width="300" height="170" src="https://www.youtube.com/embed/${model.youtubeVideoId1}" title="YouTube trailer for my top movie result" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-            <div class="results-trailer">
-                <iframe width="300" height="170" src="https://www.youtube.com/embed/${model.youtubeVideoId2}" title="YouTube trailer for my top movie result" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            </div>
-            <div class="results-trailer">
-                <iframe width="300" height="170" src="https://www.youtube.com/embed/${model.youtubeVideoId3}" title="YouTube trailer for my top movie result" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="300" height="170" src="https://www.youtube.com/embed/${child}" title="YouTube trailer for my top movie results" allow="autoplay;" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
         </div>
     </div>
 
-
+    <!--    Display this block in case we do have results to display, showing other movies-->
+    <div class="others-container" data-sly-test="${!model.emptyResults}">
+        <div>
+            <h3 class="others-title" data-sly-test="${model.otherMoviesTitle}">${model.otherMoviesTitle}</h3>
+        </div>
+        <div class="others-teaser" data-sly-test="${model.otherMoviesToDisplay && model.otherMoviesToDisplay.otherMovies}" data-sly-list.movie="${model.otherMoviesToDisplay.otherMovies}">
+            <div class="others-movie">
+                <p class="others-title" data-sly-test="${movie.title}">${movie.title}</p>
+                <p class="others-details" data-sly-test="${movie.releaseDate || movie.rating}">${movie.releaseDate} / ${movie.rating}</p>
+                <p class="others-description" data-sly-test="${movie.overview}">${movie.overview}</p>
+            </div>
+        </div>
+    </div>
 </div>
