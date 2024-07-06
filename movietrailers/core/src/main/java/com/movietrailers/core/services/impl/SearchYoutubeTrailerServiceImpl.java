@@ -1,10 +1,10 @@
-package com.movietrailers.core.service.impl;
+package com.movietrailers.core.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movietrailers.core.beans.YoutubeResponseBean;
-import com.movietrailers.core.service.SearchYoutubeTrailerService;
-import com.movietrailers.core.service.YoutubeConfigService;
+import com.movietrailers.core.services.SearchYoutubeTrailerService;
+import com.movietrailers.core.services.YoutubeConfigService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;

@@ -1,10 +1,10 @@
-package com.movietrailers.core.service.impl;
+package com.movietrailers.core.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movietrailers.core.beans.TMDBResponseBean;
-import com.movietrailers.core.service.SearchMoviesService;
-import com.movietrailers.core.service.TMDBConfigService;
+import com.movietrailers.core.services.SearchMoviesService;
+import com.movietrailers.core.services.TMDBConfigService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;

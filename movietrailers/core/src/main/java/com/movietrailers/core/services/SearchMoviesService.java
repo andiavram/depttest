@@ -1,4 +1,4 @@
-package com.movietrailers.core.service;
+package com.movietrailers.core.services;
 
 import com.movietrailers.core.beans.TMDBResponseBean;
 

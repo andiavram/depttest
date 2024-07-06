@@ -1,8 +1,8 @@
 package com.movietrailers.core.models;
 
 import com.movietrailers.core.beans.*;
-import com.movietrailers.core.service.SearchMoviesService;
-import com.movietrailers.core.service.SearchYoutubeTrailerService;
+import com.movietrailers.core.services.SearchMoviesService;
+import com.movietrailers.core.services.SearchYoutubeTrailerService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestParameter;

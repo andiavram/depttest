@@ -1,4 +1,4 @@
-package com.movietrailers.core.service;
+package com.movietrailers.core.services;
 
 /**
  * Interface for obtaining the Youtube OSGI configurations

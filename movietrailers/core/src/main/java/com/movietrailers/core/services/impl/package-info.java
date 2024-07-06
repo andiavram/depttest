@@ -14,6 +14,6 @@
  *  limitations under the License.
  */
 @Version("1.0")
-package com.movietrailers.core.service.impl;
+package com.movietrailers.core.services.impl;
 
 import org.osgi.annotation.versioning.Version;

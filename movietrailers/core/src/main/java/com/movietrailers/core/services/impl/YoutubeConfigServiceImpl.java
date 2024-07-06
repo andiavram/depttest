@@ -1,7 +1,7 @@
-package com.movietrailers.core.service.impl;
+package com.movietrailers.core.services.impl;
 
 import com.movietrailers.core.config.YoutubeConfigServiceConfiguration;
-import com.movietrailers.core.service.YoutubeConfigService;
+import com.movietrailers.core.services.YoutubeConfigService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
