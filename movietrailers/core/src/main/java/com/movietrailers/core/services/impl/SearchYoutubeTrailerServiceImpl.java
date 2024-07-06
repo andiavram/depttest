@@ -44,7 +44,7 @@ public class SearchYoutubeTrailerServiceImpl implements SearchYoutubeTrailerServ
             LOG.info("SearchYoutubeTrailerServiceImpl - calling Youtube API for the query: " + query);
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response != null && response.statusCode() == 200 && response.body() != null) {
+            if (response != null && response.statusCode() == STATUS_CODE_200_OK && response.body() != null) {
                 try {
                     LOG.info("SearchYoutubeTrailerServiceImpl - formatting Youtube API response to the YoutubeResponseBean class");
                     formattedResult = objectMapper.readValue(response.body(), YoutubeResponseBean.class);

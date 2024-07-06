@@ -18,6 +18,7 @@ public final class MovieTrailersConstants {
     public static final String YOUTUBE_SEARCH_API_CALL_URL_PATH = "https://www.googleapis.com/youtube/v3/search?key=";
     public static final String YOUTUBE_SEARCH_API_QUERY_MARKER = "&q=";
     public static final String YOUTUBE_SEARCH_API_MAX_RESULTS_MARKER = "&maxResults=";
+    public static final int STATUS_CODE_200_OK = 200;
 
     private MovieTrailersConstants() {
     }

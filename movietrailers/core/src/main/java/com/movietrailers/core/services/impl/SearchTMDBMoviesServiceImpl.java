@@ -46,7 +46,7 @@ public class SearchTMDBMoviesServiceImpl implements SearchTMDBMoviesService {
             LOG.info("SearchMoviesServiceImpl - calling TMDB API for the query: " + query);
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response != null && response.statusCode() == 200 && response.body() != null) {
+            if (response != null && response.statusCode() == STATUS_CODE_200_OK && response.body() != null) {
                 try {
                     LOG.info("SearchMoviesServiceImpl - formatting TMDB API response to the TMDBResponseBean class");
                     formattedResult = objectMapper.readValue(response.body(), TMDBResponseBean.class);
