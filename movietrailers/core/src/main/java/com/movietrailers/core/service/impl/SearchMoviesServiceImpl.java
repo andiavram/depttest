@@ -7,6 +7,8 @@ import com.movietrailers.core.service.SearchMoviesService;
 import com.movietrailers.core.service.TMDBConfigService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,6 +23,8 @@ import static com.movietrailers.core.constants.MovieTrailersConstants.*;
  */
 @Component(service = SearchMoviesService.class)
 public class SearchMoviesServiceImpl implements SearchMoviesService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SearchMoviesServiceImpl.class);
 
     @Reference
     private transient TMDBConfigService config;
@@ -39,14 +43,20 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
                                              .GET()
                                              .header(TMDB_AUTHORIZATION, TMDB_BEARER + config.apiKeyTMDB())
                                              .build();
+            LOG.info("SearchMoviesServiceImpl - calling TMDB API for the query: " + query);
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response != null && response.statusCode() == 200 && response.body() != null) {
                 try {
+                    LOG.info("SearchMoviesServiceImpl - formatting TMDB API response to the TMDBResponseBean class");
                     formattedResult = objectMapper.readValue(response.body(), TMDBResponseBean.class);
+                    LOG.info("SearchMoviesServiceImpl - formatting TMDB API response to the TMDBResponseBean class successful");
                 } catch (JsonProcessingException e) {
+                    LOG.error("SearchMoviesServiceImpl - formatting TMDB API response to the TMDBResponseBean class did not succeed");
                     throw new RuntimeException(e);
                 }
+            } else {
+                LOG.error("SearchMoviesServiceImpl - calling TMDB API did not succeed for query:" + query);
             }
         }
 

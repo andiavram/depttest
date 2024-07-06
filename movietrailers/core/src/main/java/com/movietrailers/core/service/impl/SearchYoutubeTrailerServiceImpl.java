@@ -7,6 +7,8 @@ import com.movietrailers.core.service.SearchYoutubeTrailerService;
 import com.movietrailers.core.service.YoutubeConfigService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,6 +23,8 @@ import static com.movietrailers.core.constants.MovieTrailersConstants.*;
  */
 @Component(service = SearchYoutubeTrailerService.class)
 public class SearchYoutubeTrailerServiceImpl implements SearchYoutubeTrailerService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SearchYoutubeTrailerServiceImpl.class);
 
     @Reference
     private transient YoutubeConfigService config;
@@ -37,14 +41,20 @@ public class SearchYoutubeTrailerServiceImpl implements SearchYoutubeTrailerServ
                                              .uri(URI.create(theUrl))
                                              .GET()
                                              .build();
+            LOG.info("SearchYoutubeTrailerServiceImpl - calling Youtube API for the query: " + query);
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response != null && response.statusCode() == 200 && response.body() != null) {
                 try {
+                    LOG.info("SearchYoutubeTrailerServiceImpl - formatting Youtube API response to the YoutubeResponseBean class");
                     formattedResult = objectMapper.readValue(response.body(), YoutubeResponseBean.class);
+                    LOG.info("SearchYoutubeTrailerServiceImpl - formatting Youtube API response to the YoutubeResponseBean class successful");
                 } catch (JsonProcessingException e) {
+                    LOG.error("SearchYoutubeTrailerServiceImpl - formatting Youtube API response to the YoutubeResponseBean class did not succeed");
                     throw new RuntimeException(e);
                 }
+            } else {
+                LOG.error("SearchYoutubeTrailerServiceImpl - calling Youtube API did not succeed for query:" + query);
             }
         }
 
