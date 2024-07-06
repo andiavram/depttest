@@ -1,7 +1,7 @@
 package com.movietrailers.core.models;
 
 import com.movietrailers.core.beans.*;
-import com.movietrailers.core.services.SearchMoviesService;
+import com.movietrailers.core.services.SearchTMDBMoviesService;
 import com.movietrailers.core.services.SearchYoutubeTrailerService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -53,7 +53,7 @@ public class SearchMoviesModel {
     private String movieRatingCountLabel;
 
     @OSGiService
-    private SearchMoviesService moviesService;
+    private SearchTMDBMoviesService moviesService;
     @OSGiService
     private SearchYoutubeTrailerService youtubeService;
     @Self

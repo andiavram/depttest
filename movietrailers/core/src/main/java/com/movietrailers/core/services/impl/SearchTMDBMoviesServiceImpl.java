@@ -3,7 +3,7 @@ package com.movietrailers.core.services.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.movietrailers.core.beans.TMDBResponseBean;
-import com.movietrailers.core.services.SearchMoviesService;
+import com.movietrailers.core.services.SearchTMDBMoviesService;
 import com.movietrailers.core.services.TMDBConfigService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -21,10 +21,10 @@ import static com.movietrailers.core.constants.MovieTrailersConstants.*;
 /**
  * Class for defining the TMDB API call
  */
-@Component(service = SearchMoviesService.class)
-public class SearchMoviesServiceImpl implements SearchMoviesService {
+@Component(service = SearchTMDBMoviesService.class)
+public class SearchTMDBMoviesServiceImpl implements SearchTMDBMoviesService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SearchMoviesServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SearchTMDBMoviesServiceImpl.class);
 
     @Reference
     private transient TMDBConfigService config;
