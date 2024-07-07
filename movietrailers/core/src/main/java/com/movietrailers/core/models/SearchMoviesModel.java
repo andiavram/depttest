@@ -121,30 +121,24 @@ public class SearchMoviesModel {
     }
 
     private void obtainMostRelevantYoutubeIds() throws IOException, InterruptedException {
-//        if(!mostRelevantMovieTitle.equals(StringUtils.EMPTY)) {
-//            String formattedMovieTitle = formatTextForURICreation(mostRelevantMovieTitle);
-//            YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(formattedMovieTitle + TRAILER_SEARCH_TERM, MAXIMUM_NUMBER_OF_TRAILERS);
-//            if(youtubeCallResult != null) {
-//                List<String> videoIds = new ArrayList<>();
-//                for (int i = 0 ; i < MAXIMUM_NUMBER_OF_TRAILERS ; i++) {
-//                    String id = obtainVideoId(youtubeCallResult, i);
-//                    if (!id.isEmpty()) {
-//                        videoIds.add(id);
-//                    }
-//                }
-//                if (!videoIds.isEmpty()) {
-//                    mostRelevantMovieBuilder.withVideoIds(videoIds);
-//                }
-//            }
-//        } else {
-//            emptyResults = true;
-//        }
-
-        List<String> videoIds = new ArrayList<>();
-        videoIds.add("HENVx4Xg2P4");
-        videoIds.add("XruncVMXKh4");
-        videoIds.add("01tuUN8wtr0");
-        mostRelevantMovieBuilder.withVideoIds(videoIds);
+        if(!mostRelevantMovieTitle.equals(StringUtils.EMPTY)) {
+            String formattedMovieTitle = formatTextForURICreation(mostRelevantMovieTitle);
+            YoutubeResponseBean youtubeCallResult = youtubeService.callYoutubeSearchForVideoId(formattedMovieTitle + TRAILER_SEARCH_TERM, MAXIMUM_NUMBER_OF_TRAILERS);
+            if(youtubeCallResult != null) {
+                List<String> videoIds = new ArrayList<>();
+                for (int i = 0 ; i < MAXIMUM_NUMBER_OF_TRAILERS ; i++) {
+                    String id = obtainVideoId(youtubeCallResult, i);
+                    if (!id.isEmpty()) {
+                        videoIds.add(id);
+                    }
+                }
+                if (!videoIds.isEmpty()) {
+                    mostRelevantMovieBuilder.withVideoIds(videoIds);
+                }
+            }
+        } else {
+            emptyResults = true;
+        }
     }
 
     private String obtainVideoId(YoutubeResponseBean youtubeCallResult, int index) {
